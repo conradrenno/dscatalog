@@ -1,9 +1,11 @@
 package com.devrenno.dscatalog.services;
 
+import com.devrenno.dscatalog.dto.CategoryDTO;
 import com.devrenno.dscatalog.entities.Category;
 import com.devrenno.dscatalog.repositories.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -13,8 +15,10 @@ public class CategoryService {
     @Autowired
     private CategoryRepository repository;
 
-    public List<Category> findAll() {
-        List<Category> list = repository.findAll();
+    @Transactional(readOnly = true)
+    public List<CategoryDTO> findAll() {
+        List<Category> result = repository.findAll();
+        List<CategoryDTO> list = result.stream().map(x -> new CategoryDTO(x)).toList();
         return list;
     }
 }
