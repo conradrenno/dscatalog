@@ -1,0 +1,21 @@
+package com.devrenno.dscatalog.controllers;
+
+import com.devrenno.dscatalog.entities.Category;
+import com.devrenno.dscatalog.services.CategoryService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
+@RestController
+@RequestMapping(value = "/categories")
+public class CategoryController {
+
+    private CategoryService service;
+
+    public ResponseEntity<List<Category>> findAll() {
+        List<Category> list = service.findAll();
+        return ResponseEntity.ok().body(list);
+    }
+}
