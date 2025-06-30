@@ -1,5 +1,6 @@
 package com.devrenno.dscatalog.controllers.exceptions;
 
+import com.devrenno.dscatalog.services.exceptions.DatabaseException;
 import com.devrenno.dscatalog.services.exceptions.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -21,5 +22,17 @@ public class ResourceExceptionHandler {
         err.setMessage(e.getMessage());
         err.setPath(request.getRequestURI());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(err);
+    }
+
+    @ExceptionHandler(DatabaseException.class)
+    public ResponseEntity<StandardError> integrityViolation(DatabaseException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        StandardError err = new StandardError();
+        err.setTimestamp(Instant.now());
+        err.setStatus(status.value());
+        err.setError("Data integrity violation");
+        err.setMessage(e.getMessage());
+        err.setPath(request.getRequestURI());
+        return ResponseEntity.status(status).body(err);
     }
 }

@@ -3,9 +3,11 @@ package com.devrenno.dscatalog.services;
 import com.devrenno.dscatalog.dto.CategoryDTO;
 import com.devrenno.dscatalog.entities.Category;
 import com.devrenno.dscatalog.repositories.CategoryRepository;
+import com.devrenno.dscatalog.services.exceptions.DatabaseException;
 import com.devrenno.dscatalog.services.exceptions.ResourceNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,7 +52,20 @@ public class CategoryService {
         }
     }
 
+    @Transactional
+    public void delete(Long id) {
+        if (!repository.existsById(id)){
+            throw new ResourceNotFoundException("Resource not found");
+        }
+        try {
+            repository.deleteById(id);
+        } catch (DataIntegrityViolationException e) {
+            throw new DatabaseException("Integrity violation");
+        }
+    }
+
     private void dtoToCategory(Category category, CategoryDTO dto) {
         category.setName(dto.getName());
     }
+
 }
