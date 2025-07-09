@@ -1,7 +1,10 @@
 package com.devrenno.dscatalog.services;
 
+import com.devrenno.dscatalog.dto.CategoryDTO;
 import com.devrenno.dscatalog.dto.ProductDTO;
+import com.devrenno.dscatalog.entities.Category;
 import com.devrenno.dscatalog.entities.Product;
+import com.devrenno.dscatalog.repositories.CategoryRepository;
 import com.devrenno.dscatalog.repositories.ProductRepository;
 import com.devrenno.dscatalog.services.exceptions.DatabaseException;
 import com.devrenno.dscatalog.services.exceptions.ResourceNotFoundException;
@@ -18,6 +21,9 @@ public class ProductService {
 
     @Autowired
     private ProductRepository repository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @Transactional(readOnly = true)
     public Page<ProductDTO> findAll(Pageable pageable) {
@@ -66,6 +72,16 @@ public class ProductService {
 
     private void dtoToProduct(Product product, ProductDTO dto) {
         product.setName(dto.getName());
+        product.setDescription(dto.getDescription());
+        product.setPrice(dto.getPrice());
+        product.setImgUrl(dto.getImgUrl());
+
+        product.getCategories().clear();
+        for (CategoryDTO catDto : dto.getCategories()) {
+            Category category = categoryRepository.getReferenceById(catDto.getId());
+            product.getCategories().add(category);
+        }
+
     }
 
 }
