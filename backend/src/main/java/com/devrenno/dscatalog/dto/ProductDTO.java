@@ -2,6 +2,10 @@ package com.devrenno.dscatalog.dto;
 
 import com.devrenno.dscatalog.entities.Category;
 import com.devrenno.dscatalog.entities.Product;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -10,11 +14,22 @@ import java.util.Set;
 
 public class ProductDTO {
 
+
     private Long id;
+
+    @Size(min = 5, max = 60, message = "Name must be between 5 and 60 characters")
+    @NotBlank(message = "Name is required")
     private String name;
+
+    @NotBlank(message = "Description is required")
     private String description;
+
+    @Positive(message = "Price must be positive")
     private Double price;
+
     private String imgUrl;
+
+    @PastOrPresent(message = "Date must be in the past or present")
     private Instant date;
 
 
