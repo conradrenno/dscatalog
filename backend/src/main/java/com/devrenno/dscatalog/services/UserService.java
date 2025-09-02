@@ -3,6 +3,7 @@ package com.devrenno.dscatalog.services;
 import com.devrenno.dscatalog.dto.RoleDTO;
 import com.devrenno.dscatalog.dto.UserDTO;
 import com.devrenno.dscatalog.dto.UserInsertDTO;
+import com.devrenno.dscatalog.dto.UserUpdateDTO;
 import com.devrenno.dscatalog.entities.Role;
 import com.devrenno.dscatalog.entities.User;
 import com.devrenno.dscatalog.repositories.RoleRepository;
@@ -53,7 +54,7 @@ public class UserService {
     }
 
     @Transactional
-    public UserDTO update(Long id, UserDTO dto) {
+    public UserDTO update(Long id, UserUpdateDTO dto) {
         try {
             User user = repository.getReferenceById(id);
             dtoToUser(user, dto);
